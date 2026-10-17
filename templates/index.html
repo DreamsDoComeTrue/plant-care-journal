@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% block content %}
 <section class="hero"><div><div class="eyebrow">Plant care journal</div><h1>Your little garden</h1><p>A simple place to track care routines, notes, and new growth.</p></div><a class="button" href="{{ url_for('add_plant') }}">＋ Add a plant</a></section>
-<section class="stats"><div><small>Total plants</small><strong>{{ plants|length }}</strong></div><div><small>Tasks due</small><strong>{{ due_count }}</strong></div><div><small>Database</small><strong>Firestore</strong></div></section>
+<section class="stats"><div><small>Total plants</small><strong>{{ plants|length }}</strong></div><div><small>Tasks due</small><strong>{{ due_count }}</strong></div></section>
 <div class="section-head"><h2>My plants</h2></div>
 {% if plants %}<div class="grid">{% for plant in plants %}<article class="card"><div class="plant-image placeholder">🌿</div><div class="card-body"><div class="card-title"><div><h3>{{ plant.name }}</h3><p>{{ plant.species or 'Unknown species' }}</p></div><span class="badge {% if plant.tasks|selectattr('due')|list %}due{% else %}ok{% endif %}">{% set due = plant.tasks|selectattr('due')|list|length %}{{ due }} due</span></div><p class="muted">{{ plant.light }} · {{ plant.tasks|length }} recurring task(s)</p><a class="button secondary full" href="{{ url_for('plant_detail', plant_id=plant.id) }}">View journal</a></div></article>{% endfor %}</div>{% else %}<div class="empty">No plants yet. Add your first plant to begin your journal.</div>{% endif %}
 {% endblock %}
