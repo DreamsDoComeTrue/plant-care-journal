@@ -52,6 +52,16 @@ def index():
     due_count = sum(task["due"] for plant in plants for task in plant["tasks"])
     return render_template("index.html", plants=plants, due_count=due_count)
 
+@app.post("/task/<plant_id>/<task_id>/delete")
+def delete_task(plant_id, task_id):
+    task_ref = get_db().collection("plants").document(plant_id).collection("tasks").document(task_id)
+
+    if not task_ref.get().exists:
+        return "Task not found", 404
+
+    task_ref.delete()
+    flash("Task removed.", "success")
+    return redirect(url_for("plant_detail", plant_id=plant_id))
 
 @app.route("/plant/<plant_id>")
 def plant_detail(plant_id):
